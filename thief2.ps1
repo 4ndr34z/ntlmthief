@@ -82,6 +82,7 @@ clear
 $logo = 'IF9fX19fICBfX18gIF9fX19fX19fX19fICBfX18gICAgICAgX19fICAgICAgX19fICBfX19fX19fX19fXyAgX18gICAgX18gICBfXyAgICAgX19fX19fXyAgIF9fX19fX18gIAooXCIgICBcfCIgIFwoIiAgICAgXyAgICIpfCIgIHwgICAgIHwiICBcICAgIC8iICB8KCIgICAgIF8gICAiKS8iIHwgIHwgIlwgfCIgXCAgIC8iICAgICAifCAvIiAgICAgInwgCnwuXFwgICBcICAgIHwpX18vICBcXF9fLyB8fCAgfCAgICAgIFwgICBcICAvLyAgIHwgKV9fLyAgXFxfXy8oOiAgKF9fKSAgOil8fCAgfCAoOiBfX19fX18pKDogX19fX19fKSAKfDogXC4gICBcXCAgfCAgIFxcXyAvICAgIHw6ICB8ICAgICAgL1xcICBcLy4gICAgfCAgICBcXF8gLyAgICBcLyAgICAgIFwvIHw6ICB8ICBcLyAgICB8ICAgXC8gICAgfCAgIAp8LiAgXCAgICBcLiB8ICAgfC4gIHwgICAgIFwgIHxfX18gIHw6IFwuICAgICAgICB8ICAgIHwuICB8ICAgIC8vICBfXyAgXFwgfC4gIHwgIC8vIF9fXylfICAvLyBfX18pICAgCnwgICAgXCAgICBcIHwgICBcOiAgfCAgICAoIFxffDogIFwgfC4gIFwgICAgLzogIHwgICAgXDogIHwgICAoOiAgKCAgKSAgOikvXCAgfFwoOiAgICAgICJ8KDogICggICAgICAKIFxfX198XF9fX19cKSAgICBcX198ICAgICBcX19fX19fXyl8X19ffFxfXy98X19ffCAgICAgXF9ffCAgICBcX198ICB8X18vKF9fXF98XylcX19fX19fXykgXF9fLyAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCg=='
 $logo = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($logo))
 write-host $logo
+Write-Host "                                                                                        by 4ndr34z"
 write-host "`nAbout:`nExfiltrates users netNTLM hash to target IP when opening the document,`neffectively stealing the hash for offline cracking.`n`nOr, the target IP could be a listening NTLMrelayx, relaying it to other resources.`n"
 
 $MainMenu = {
