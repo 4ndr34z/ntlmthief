@@ -88,11 +88,11 @@ write-host "`nAbout:`nExfiltrates users netNTLM hash to target IP when opening t
 $MainMenu = {
 
   Write-Host
-  Write-Host " 1.) Word-Thief"
-  Write-Host " 2.) Excel-Thief"
-  Write-Host " 3.) Powerpoint-Thief"
-  Write-Host " 4.) Adobe PDF-Thief"
-  Write-Host " 5.) Quit"
+  Write-Host " 1. Word-Thief"
+  Write-Host " 2. Excel-Thief"
+  Write-Host " 3. Powerpoint-Thief"
+  Write-Host " 4. Adobe PDF-Thief"
+  Write-Host " 5. Quit"
   Write-Host
   Write-Host " Select an option and press Enter: "  -nonewline
   }
